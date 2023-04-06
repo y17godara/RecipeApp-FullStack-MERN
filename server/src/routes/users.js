@@ -9,7 +9,7 @@ router.post("/register", async (req, res) => {
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username }); 
 
-        if(user) {
+     if(user) {
         return res.json({ message: "User Already Exists! Login Please" });
     }
 
@@ -21,7 +21,23 @@ router.post("/register", async (req, res) => {
     res.json({ message: "User Registered Successfully" });
 });
 
-router.post("/login");
+router.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    const user = await UserModel.findOne({ username });
+
+    if(!user) {
+        return res.json({ message: "Usern Not Exists! Register New Please" })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if(!isPasswordValid) {
+        return res.json({ message: "Username or Password Entered is Incorrect! Re-Check Please" })
+    }
+
+    
+
+});
 
 
 export { router as userRouter };
