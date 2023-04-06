@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt,  { hash } from 'bcrypt';
 import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
@@ -35,7 +35,9 @@ router.post("/login", async (req, res) => {
         return res.json({ message: "Username or Password Entered is Incorrect! Re-Check Please" })
     }
 
-    
+
+    const token = jwt.sign({ id: user._id }, "secret");
+    res.json({ token, userID: user._id });
 
 });
 
